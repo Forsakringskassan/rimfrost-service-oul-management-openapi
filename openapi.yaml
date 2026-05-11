@@ -41,6 +41,12 @@ paths:
             type: string
             format: uuid
           description: Unikt ID som identifierar uppgiften som ska avslutas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUppgiftRequest'
       responses:
         '200':
           description: Uppgiften avslutades
@@ -87,6 +93,24 @@ components:
           type: string
         url:
           type: string
+        replyTopic:
+          type: string
+          description: Kafka-topic som används för statusnotifieringar
+        cloudeventAttributes:
+          type: object
+          additionalProperties:
+            type: string
+          description: CloudEvent-attribut för routing tillbaka till anropande tjänst
+
+    EndUppgiftRequest:
+      type: object
+      title: EndUppgiftRequest
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: Anledning till att uppgiften avslutas
 
     UppgiftResponse:
       type: object
@@ -108,6 +132,11 @@ components:
       title: Idtyp
       description: Identifierare för en individ
       properties:
-        id:
+        typId:
           type: string
-          description: Unikt ID som identifierar en individ
+          description: Unikt ID som identifierar vilken typ av värde som anges
+        varde:
+          type: string
+          description: ID-värde som identifieras av typ
+      required:
+        - typId
