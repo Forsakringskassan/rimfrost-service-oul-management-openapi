@@ -41,6 +41,12 @@ paths:
             type: string
             format: uuid
           description: Unikt ID som identifierar uppgiften som ska avslutas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUppgiftRequest'
       responses:
         '200':
           description: Uppgiften avslutades
@@ -87,6 +93,10 @@ components:
           type: string
         url:
           type: string
+        subTopic:
+          type: string
+        cloudeventAttributes:
+          $ref: '#/components/schemas/CloudeventAttributes'
 
     UppgiftResponse:
       type: object
@@ -102,6 +112,25 @@ components:
           type: string
           format: uuid
           description: Unikt ID som identifierar handläggningsärendet
+        cloudeventAttributes:
+          $ref: '#/components/schemas/CloudeventAttributes'
+
+    EndUppgiftRequest:
+      type: object
+      title: EndUppgiftRequest
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: Anledning till att uppgiften avslutas
+
+    CloudeventAttributes:
+      type: object
+      title: CloudeventAttributes
+      additionalProperties:
+        type: string
+      description: CloudEvent-attribut som skickas med i request och returneras oförändrade i response och statusnotifikationer
 
     Idtyp:
       type: object
