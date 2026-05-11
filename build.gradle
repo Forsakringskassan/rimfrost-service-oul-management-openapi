@@ -1,0 +1,48 @@
+buildscript {
+  repositories {
+	gradlePluginPortal()
+	mavenCentral()
+	mavenLocal()
+	maven {
+	  url = uri("https://maven.pkg.github.com/Forsakringskassan/repository")
+	  credentials {
+        username = project.findProperty("GITHUB_ACTOR") ?: System.getenv("PACKAGES_RW_ACTOR")
+        password = project.findProperty("GITHUB_TOKEN") ?: System.getenv("PACKAGES_RW_TOKEN")
+	  }
+	}
+  }
+
+  dependencies {
+    classpath "se.fk.gradle:gradle-conventions:1.18.1"
+  }
+}
+
+apply plugin: "se.fk.gradle.bundle-openapi"
+
+allprojects {
+	javaExtension {
+		javaVersion = 21
+	}
+}
+
+project("rimfrost-service-oul-management-api-spec",{
+	fkOpenApi {
+		generatorName.set("openapi-yaml")
+	}
+})
+
+project("rimfrost-service-oul-management-api-jaxrs-spec",{
+	fkOpenApi {
+		generatorName.set("jaxrs-spec")
+	}
+
+	dependencies {
+		compileOnly 'jakarta.ws.rs:jakarta.ws.rs-api:4.0.0'
+		compileOnly 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+		compileOnly 'jakarta.validation:jakarta.validation-api:3.1.1'
+		compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.21.3'
+		compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.21'
+		compileOnly 'com.fasterxml.jackson.core:jackson-core:2.21.3'
+		compileOnly 'org.openapitools:jackson-databind-nullable:0.2.10'
+	}
+})

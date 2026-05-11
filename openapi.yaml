@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: Operativt uppgiftslager API
+  version: 1.0.0
+  description: API för att skapa och avsluta operativa uppgifter
+
+paths:
+  /uppgifter:
+    post:
+      summary: Skapa uppgift
+      description: Skapar en ny operativ uppgift i uppgiftslagret
+      operationId: createUppgift
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUppgiftRequest'
+      responses:
+        '200':
+          description: Uppgiften skapades
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UppgiftResponse'
+        '400':
+          description: Ogiltigt anrop
+        '500':
+          description: Internt serverfel
+
+  /uppgifter/{uppgiftId}/end:
+    post:
+      summary: Avsluta uppgift
+      description: Avslutar en befintlig operativ uppgift
+      operationId: endUppgift
+      parameters:
+        - name: uppgiftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unikt ID som identifierar uppgiften som ska avslutas
+      responses:
+        '200':
+          description: Uppgiften avslutades
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UppgiftResponse'
+        '404':
+          description: Uppgiften hittades inte
+        '500':
+          description: Internt serverfel
+
+components:
+  schemas:
+    CreateUppgiftRequest:
+      type: object
+      title: CreateUppgiftRequest
+      required:
+        - version
+        - handlaggning_id
+        - regel
+      properties:
+        version:
+          type: string
+          description: Regelns version
+        handlaggning_id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar handläggningsärendet
+        individer:
+          type: array
+          items:
+            $ref: '#/components/schemas/Idtyp'
+          description: Lista av individer i ärendet
+        regel:
+          type: string
+          description: Namn på regeln
+        beskrivning:
+          type: string
+          description: Kortfattad beskrivning av uppgiften
+        verksamhetslogik:
+          type: string
+        roll:
+          type: string
+        url:
+          type: string
+
+    UppgiftResponse:
+      type: object
+      title: UppgiftResponse
+      required:
+        - result
+      properties:
+        uppgift_id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar instansen av uppgifts-objektet
+        handlaggning_id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar handläggningsärendet
+
+    Idtyp:
+      type: object
+      title: Idtyp
+      description: Identifierare för en individ
+      properties:
+        id:
+          type: string
+          description: Unikt ID som identifierar en individ
