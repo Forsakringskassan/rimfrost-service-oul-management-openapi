@@ -114,6 +114,15 @@ components:
           description: Unikt ID som identifierar handläggningsärendet
         cloudeventAttributes:
           $ref: '#/components/schemas/CloudeventAttributes'
+        status:
+          title: status
+          type: string
+          description: Status för uppgiften
+          enum:
+            - Ny
+            - Tilldelad
+            - Avslutad
+            - Avbruten
 
     EndUppgiftRequest:
       type: object
