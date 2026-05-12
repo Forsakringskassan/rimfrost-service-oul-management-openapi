@@ -41,6 +41,12 @@ paths:
             type: string
             format: uuid
           description: Unikt ID som identifierar uppgiften som ska avslutas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUppgiftRequest'
       responses:
         '200':
           description: Uppgiften avslutades
@@ -87,6 +93,10 @@ components:
           type: string
         url:
           type: string
+        subTopic:
+          type: string
+        cloudeventAttributes:
+          $ref: '#/components/schemas/CloudeventAttributes'
 
     UppgiftResponse:
       type: object
@@ -102,12 +112,42 @@ components:
           type: string
           format: uuid
           description: Unikt ID som identifierar handläggningsärendet
+        cloudeventAttributes:
+          $ref: '#/components/schemas/CloudeventAttributes'
+        status:
+          title: status
+          type: string
+          description: Status för uppgiften
+
+    EndUppgiftRequest:
+      type: object
+      title: EndUppgiftRequest
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          description: Anledning till att uppgiften avslutas
+
+    CloudeventAttributes:
+      type: object
+      title: CloudeventAttributes
+      additionalProperties:
+        type: string
+      description: CloudEvent-attribut som skickas med i request och returneras oförändrade i response och statusnotifikationer
 
     Idtyp:
       type: object
-      title: Idtyp
-      description: Identifierare för en individ
       properties:
-        id:
+        typId:
           type: string
-          description: Unikt ID som identifierar en individ
+          description: Unikt ID som identifierar vilken typ av värde som anges
+        varde:
+          type: string
+          description: ID-värde som identifieras av typ
+      required:
+        - typId
+        - varde
+      example:
+        typId: "4c34906c-03d9-425f-9a1a-062ef6eb88c7"
+        varde: "19901010-1234"
