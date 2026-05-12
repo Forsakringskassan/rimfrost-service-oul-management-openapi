@@ -118,11 +118,6 @@ components:
           title: status
           type: string
           description: Status för uppgiften
-          enum:
-            - Ny
-            - Tilldelad
-            - Avslutad
-            - Avbruten
 
     EndUppgiftRequest:
       type: object
@@ -143,9 +138,16 @@ components:
 
     Idtyp:
       type: object
-      title: Idtyp
-      description: Identifierare för en individ
       properties:
-        id:
+        typId:
           type: string
-          description: Unikt ID som identifierar en individ
+          description: Unikt ID som identifierar vilken typ av värde som anges
+        varde:
+          type: string
+          description: ID-värde som identifieras av typ
+      required:
+        - typId
+        - varde
+      example:
+        typId: "4c34906c-03d9-425f-9a1a-062ef6eb88c7"
+        varde: "19901010-1234"
