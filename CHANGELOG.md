@@ -1,3 +1,9 @@
+## 0.0.3 (2026-05-20)
+
+### Bug Fixes
+
+-  Change group id to avoid collision with classes defined in other OUL openapi spec ([38a9d](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/38a9d14fffef522) Lars Persson)  
+
 ## 0.0.2 (2026-05-20)
 
 ### Bug Fixes
