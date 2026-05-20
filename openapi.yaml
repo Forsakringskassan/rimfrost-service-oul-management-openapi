@@ -27,6 +27,21 @@ paths:
           description: Ogiltigt anrop
         '500':
           description: Internt serverfel
+    get:
+      summary: Hämta uppgifter
+      description: Hämta tillgängliga uppgifter
+      operationId: getUppgifter
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OperativUppgift'
+        '500':
+          description: Internt serverfel
 
   /uppgifter/{uppgiftId}/end:
     post:
@@ -128,6 +143,62 @@ components:
         reason:
           type: string
           description: Anledning till att uppgiften avslutas
+
+    OperativUppgift:
+      type: object
+      required:
+        - uppgift_id
+        - handlaggning_id
+        - status
+        - skapad
+      properties:
+        uppgift_id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar instansen av uppgifts-objektet
+        handlaggning_id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar handläggningsärendet
+        skapad:
+          type: string
+          format: date
+          description: DateTime av när uppgiften skapades i ISO 8601 format
+        handlaggar_id:
+          $ref: "#/components/schemas/Idtyp"
+          description: Unikt ID för den tilldelade handläggaren
+        planerad_till:
+          type: string
+          format: date
+          nullable: true
+          description: DateTime av tidpunkten som uppgiften är planerad att vara färdig i ISO 8601 format
+        utford:
+          type: string
+          format: date
+          nullable: true
+          description: DateTime av tidpunkten som uppgiften blev färdig i ISO 8601 format
+        status:
+          type: string
+          description: Status för uppgiften
+        individer:
+          type: array
+          description: Lista av individ-ID
+          items:
+            $ref: '#/components/schemas/Idtyp'
+        regel:
+          type: string
+          description: Namn på regeln
+        beskrivning:
+          type: string
+          description: Kortfattad beskrivning av uppgiften
+        verksamhetslogik:
+          type: string
+        roll:
+          type: string
+          description: Vilken roll som bör utföra uppgiften
+        url:
+          type: string
+          description: Länk till resursen
 
     CloudeventAttributes:
       type: object
