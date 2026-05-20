@@ -1,3 +1,9 @@
+## 0.0.2 (2026-05-20)
+
+### Bug Fixes
+
+-  Add endpoint for listing uppgifter ([3d190](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/3d1903ed7bf3b9f) Lars Persson)  
+
 # rimfrost-service-oul-management-openapi changelog
 
 Changelog of rimfrost-service-oul-management-openapi.
