@@ -1,3 +1,9 @@
+## 0.0.4 (2026-05-21)
+
+### Bug Fixes
+
+-  Add erbjudande information to OUL uppgift create request ([443d1](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/443d187c8c7ea19) Lars Persson)  
+
 ## 0.0.3 (2026-05-20)
 
 ### Bug Fixes
