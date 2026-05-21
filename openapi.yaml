@@ -208,6 +208,8 @@ components:
         url:
           type: string
           description: Länk till resursen
+        erbjudande:
+          $ref: '#/components/schemas/Erbjudande'
       required:
         - uppgift_id
         - handlaggning_id
@@ -222,6 +224,7 @@ components:
         - verksamhetslogik
         - roll
         - url
+        - erbjudande
 
 
     CloudeventAttributes:
