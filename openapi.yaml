@@ -79,10 +79,6 @@ components:
     CreateUppgiftRequest:
       type: object
       title: CreateUppgiftRequest
-      required:
-        - version
-        - handlaggning_id
-        - regel
       properties:
         version:
           type: string
@@ -108,16 +104,28 @@ components:
           type: string
         url:
           type: string
-        subTopic:
+        sub_topic:
           type: string
-        cloudeventAttributes:
+        cloudevent_attributes:
           $ref: '#/components/schemas/CloudeventAttributes'
+        erbjudande:
+          $ref: '#/components/schemas/Erbjudande'
+      required:
+        - version
+        - handlaggning_id
+        - individer
+        - regel
+        - beskrivning
+        - verksamhetslogik
+        - roll
+        - url
+        - sub_topic
+        - cloudevent_attributes
+        - erbjudande
 
     UppgiftResponse:
       type: object
       title: UppgiftResponse
-      required:
-        - result
       properties:
         uppgift_id:
           type: string
@@ -127,30 +135,30 @@ components:
           type: string
           format: uuid
           description: Unikt ID som identifierar handläggningsärendet
-        cloudeventAttributes:
+        cloudevent_attributes:
           $ref: '#/components/schemas/CloudeventAttributes'
         status:
           title: status
           type: string
           description: Status för uppgiften
+      required:
+        - uppgift_id
+        - handlaggning_id
+        - cloudevent_attributes
+        - status
 
     EndUppgiftRequest:
       type: object
       title: EndUppgiftRequest
-      required:
-        - reason
       properties:
         reason:
           type: string
           description: Anledning till att uppgiften avslutas
+      required:
+        - reason
 
     OperativUppgift:
       type: object
-      required:
-        - uppgift_id
-        - handlaggning_id
-        - status
-        - skapad
       properties:
         uppgift_id:
           type: string
@@ -167,6 +175,7 @@ components:
         handlaggar_id:
           $ref: "#/components/schemas/Idtyp"
           description: Unikt ID för den tilldelade handläggaren
+          nullable: true
         planerad_till:
           type: string
           format: date
@@ -199,6 +208,21 @@ components:
         url:
           type: string
           description: Länk till resursen
+      required:
+        - uppgift_id
+        - handlaggning_id
+        - skapad
+        - handlaggar_id
+        - planerad_till
+        - utford
+        - status
+        - individer
+        - regel
+        - beskrining
+        - verksamhetslogik
+        - roll
+        - url
+
 
     CloudeventAttributes:
       type: object
@@ -210,15 +234,31 @@ components:
     Idtyp:
       type: object
       properties:
-        typId:
+        typ_id:
           type: string
           description: Unikt ID som identifierar vilken typ av värde som anges
         varde:
           type: string
           description: ID-värde som identifieras av typ
       required:
-        - typId
+        - typ_id
         - varde
       example:
-        typId: "4c34906c-03d9-425f-9a1a-062ef6eb88c7"
+        typ_id: "4c34906c-03d9-425f-9a1a-062ef6eb88c7"
         varde: "19901010-1234"
+
+    Erbjudande:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unikt ID som identifierar vilket erbjudande som avses
+        namn:
+          type: string
+          description: Namn på erbjudandet
+      required:
+        - id
+        - namn
+      example:
+        id: "bab4c3cc-0697-4774-ac49-487222b7b237"
+        namn: "Ansökan om tillfällig vård av husdjur"
