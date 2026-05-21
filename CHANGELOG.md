@@ -1,3 +1,9 @@
+## 0.0.5 (2026-05-21)
+
+### Bug Fixes
+
+-  Add erbjudande to OperativUppgift ([bdfb0](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/bdfb0b711d44567) Lars Persson)  
+
 ## 0.0.4 (2026-05-21)
 
 ### Bug Fixes
