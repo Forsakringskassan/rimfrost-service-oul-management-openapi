@@ -10,24 +10,32 @@ The OUL management API manages operative tasks (uppgifter). Currently there is n
 - The defined sort order is a system-wide configuration — it is not set per handläggare request.
 - Once set via the management API, the sort order applies to all handläggare clients when they retrieve uppgifter.
 - The sort order shall be persisted (survive restarts).
+- Each created sort order specification is assigned a unique ID (UUID) upon creation.
 
 ## Scope
 
 Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side for:
 
-1. Getting the current persisted sort order specification.
-2. Setting/updating the persisted sort order.
-3. Previewing the result of a sort specification against current uppgifter without committing it.
+1. Creating a new sort order specification (returns its generated ID).
+2. Getting a sort order specification — returns the latest spec by default, or a specific spec if an ID is provided.
+3. Deleting a sort order specification by ID.
+4. Viewing the result of a sort specification. The preview supports three modes:
+   - No parameters: the latest persisted spec is used.
+   - Spec ID provided: the identified existing spec is used.
+   - Full sort order spec provided inline: the provided spec is used.
+   - If both a spec ID and an inline spec are provided, the request is rejected.
 
-The get (sorted uppgifter) and preview endpoints shall support a `max` parameter to limit the number of returned uppgifter.
+The preview shall support a `max` parameter to limit the number of returned uppgifter.
 
-No changes to the handläggare-facing API are required — the sort order is applied transparently on the service side.
+No changes to the handläggare-facing API are required — the sort order is applied transparently on the service side.<br>
+A possible future extension could be to apply different sort order specs to different handläggare.
+
 
 ## Requirements (sort order specification)
 
 - The sort order is an ordered list of entries; the position in the list determines priority (first = highest).
-- Each entry contains one or more field+value constraints (all must match, AND semantics) and an optional "sort by" specifying a single field and direction (asc/desc).
-- The sort mechanism traverses the list in order; an uppgift is placed at the position of the first entry whose constraints all match.
+- Each entry contains one or more field+value constraints (all must match, AND semantics) and an optional "sort by" specifying a single field and direction (asc/desc) within the entry.
+- The sort mechanism traverses the list in order; an uppgift is placed at the position of the first entry whose constraints all match. Each uppgift appears at most once — if multiple entries match, only the highest-priority (earliest) entry applies.
 - Uppgifter matching the same entry are ordered among themselves according to that entry's "sort by" specification; if none is given, their relative order is unspecified.
 - Uppgifter matching no entry fall to the bottom in unspecified order.
 - The list length is not fixed.
