@@ -62,9 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OperativUppgift'
+                $ref: '#/components/schemas/UppgiftPage'
         '404':
           description: Angiven sorteringsordning hittades inte
         '500':
@@ -82,8 +80,8 @@ paths:
             schema:
               $ref: '#/components/schemas/SorteringsordningSpec'
             examples:
-              pinUppgift:
-                summary: Pinna en specifik uppgift högst
+              specifikUppgift:
+                summary: Prioritera en specifik uppgift
                 value:
                   entries:
                     - constraints:
@@ -207,8 +205,8 @@ paths:
             schema:
               $ref: '#/components/schemas/SorteringsordningSpec'
             examples:
-              pinUppgift:
-                summary: Pinna en specifik uppgift högst
+              specifikUppgift:
+                summary: Prioritera en specifik uppgift
                 value:
                   entries:
                     - constraints:
@@ -264,9 +262,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OperativUppgift'
+                $ref: '#/components/schemas/UppgiftPage'
         '400':
           description: Ogiltigt anrop
         '500':
@@ -332,10 +328,10 @@ paths:
           schema:
             type: string
             format: uuid
-          description: ID för sorteringsordningen som ska anges som standard
+          description: ID för sorteringsordningen som ska anges som default
       responses:
         '204':
-          description: Standardsorteringsordningen uppdaterades
+          description: Default sorteringsordning uppdaterades
         '404':
           description: Sorteringsordningen hittades inte
         '500':
@@ -374,6 +370,22 @@ paths:
 
 components:
   schemas:
+    UppgiftPage:
+      type: object
+      title: UppgiftPage
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          description: Totalt antal uppgifter som matchar förfrågan
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperativUppgift'
+      required:
+        - total
+        - items
+
     CreateUppgiftRequest:
       type: object
       title: CreateUppgiftRequest
@@ -543,7 +555,7 @@ components:
       description: >
         En post i sorteringsordningen. Om constraints utelämnas matchar posten alla
         uppgifter som inte placerats av en tidigare post (catch-all). En catch-all-post
-        placerad före andra poster gör efterföljande poster onåbara.
+        placerad före andra poster gör efterföljande poster överflödiga.
       properties:
         constraints:
           type: array
