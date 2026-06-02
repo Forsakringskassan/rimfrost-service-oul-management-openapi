@@ -8,7 +8,7 @@ The OUL management API manages operative tasks (uppgifter). Currently there is n
 
 - The management API shall expose a mechanism to define a sort order for uppgifter.
 - The defined sort order is a system-wide configuration — it is not set per handläggare request.
-- One sort order specification can be designated as the default; this is the spec applied when handläggare clients retrieve uppgifter without specifying a sort order ID.
+- One sort order specification must be designated as the default; this is the spec applied when handläggare clients retrieve uppgifter without specifying a sort order ID.
 - The sort order shall be persisted (survive restarts).
 - Each created sort order specification is assigned a unique ID (UUID) upon creation.
 
