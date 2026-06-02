@@ -177,23 +177,6 @@ paths:
         '500':
           description: Internt serverfel
 
-  /sorteringsordning/latest:
-    get:
-      summary: Hämta senaste sorteringsordning
-      description: Hämtar den senaste sparade sorteringsordningen
-      operationId: getLatestSorteringsordning
-      responses:
-        '200':
-          description: Förfrågan genomförd OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SorteringsordningResponse'
-        '404':
-          description: Ingen sorteringsordning finns
-        '500':
-          description: Internt serverfel
-
   /sorteringsordning/preview:
     post:
       summary: Förhandsgranska sorteringsordning

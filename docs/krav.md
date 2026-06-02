@@ -18,12 +18,11 @@ Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side
 
 1. Creating a new sort order specification (returns its generated ID).
 2. Getting all sort order specifications.
-3. Getting the latest sort order specification (`/sorteringsordning/latest`).
-4. Getting the default sort order specification (`/sorteringsordning/default`).
-5. Setting a specific sort order specification as the default (`PUT /sorteringsordning/{id}/default`).
-6. Getting a specific sort order specification by ID.
-7. Deleting a sort order specification by ID.
-8. Previewing the result of a full sort order spec provided inline, without persisting it.
+3. Getting the default sort order specification (`/sorteringsordning/default`).
+4. Setting a specific sort order specification as the default (`PUT /sorteringsordning/{id}/default`).
+5. Getting a specific sort order specification by ID.
+6. Deleting a sort order specification by ID.
+7. Previewing the result of a full sort order spec provided inline, without persisting it.
 
 `GET /uppgifter` and `POST /sorteringsordning/preview` support offset-based pagination via `limit` and `offset` parameters. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the default sort order spec is applied.
 
