@@ -482,7 +482,7 @@ components:
         skapad:
           type: string
           format: date
-          description: DateTime av när uppgiften skapades i ISO 8601 format
+          description: Datum då uppgiften skapades i ISO 8601 format
         handlaggar_id:
           $ref: "#/components/schemas/Idtyp"
           description: Unikt ID för den tilldelade handläggaren
@@ -491,12 +491,12 @@ components:
           type: string
           format: date
           nullable: true
-          description: DateTime av tidpunkten som uppgiften är planerad att vara färdig i ISO 8601 format
+          description: Datum då uppgiften är planerad att vara färdig i ISO 8601 format
         utford:
           type: string
           format: date
           nullable: true
-          description: DateTime av tidpunkten som uppgiften blev färdig i ISO 8601 format
+          description: Datum då uppgiften blev färdig i ISO 8601 format
         status:
           type: string
           description: Status för uppgiften
