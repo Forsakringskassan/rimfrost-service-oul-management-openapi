@@ -553,7 +553,7 @@ components:
 
     SorteringsordningField:
       type: string
-      description: Fält som kan användas i sorteringsvillkor och sorteringsordning
+      description: Alla fält som kan användas i sorteringsordning (sort_by)
       enum:
         - uppgift_id
         - skapad
@@ -564,41 +564,138 @@ components:
         - verksamhetslogik
         - beskrivning
 
+    SorteringsordningFieldEq:
+      type: string
+      description: Fält som stödjer eq-operator (exakt matchning)
+      enum:
+        - uppgift_id
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    SorteringsordningFieldString:
+      type: string
+      description: Strängfält som stödjer contains-operator
+      enum:
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    SorteringsordningFieldDate:
+      type: string
+      description: Datumfält som stödjer between och offset_to_now
+      enum:
+        - skapad
+        - planerad_till
+
     Constraint:
+      oneOf:
+        - $ref: '#/components/schemas/ConstraintEq'
+        - $ref: '#/components/schemas/ConstraintContains'
+        - $ref: '#/components/schemas/ConstraintBetween'
+        - $ref: '#/components/schemas/ConstraintOffsetToNow'
+      discriminator:
+        propertyName: operator
+        mapping:
+          eq: '#/components/schemas/ConstraintEq'
+          contains: '#/components/schemas/ConstraintContains'
+          between: '#/components/schemas/ConstraintBetween'
+          offset_to_now: '#/components/schemas/ConstraintOffsetToNow'
+
+    ConstraintEq:
       type: object
-      title: Constraint
+      title: ConstraintEq
       properties:
         field:
-          $ref: '#/components/schemas/SorteringsordningField'
+          $ref: '#/components/schemas/SorteringsordningFieldEq'
         operator:
           type: string
-          description: Typ av villkor
-          enum:
-            - eq
-            - contains
-            - between
-            - offset_to_now
+          enum: [eq]
         value:
           type: string
-          description: Värde för eq och contains
-        from:
-          type: string
-          format: date
-          description: Startdatum för between (ISO 8601)
-        to:
-          type: string
-          format: date
-          description: Slutdatum för between (ISO 8601)
-        offset:
-          type: string
-          description: Offset från nu för offset_to_now (t.ex. -7d)
+          description: Exakt matchningsvärde
       required:
         - field
         - operator
+        - value
+      example:
+        field: beskrivning
+        operator: eq
+        value: "hund"
+
+    ConstraintContains:
+      type: object
+      title: ConstraintContains
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldString'
+        operator:
+          type: string
+          enum: [contains]
+        value:
+          type: string
+          description: Delvärde som fältet ska innehålla
+      required:
+        - field
+        - operator
+        - value
       example:
         field: beskrivning
         operator: contains
         value: "hund"
+
+    ConstraintBetween:
+      type: object
+      title: ConstraintBetween
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldDate'
+        operator:
+          type: string
+          enum: [between]
+        from:
+          type: string
+          format: date
+          description: Startdatum för intervallet (ISO 8601)
+        to:
+          type: string
+          format: date
+          description: Slutdatum för intervallet (ISO 8601)
+      required:
+        - field
+        - operator
+        - from
+        - to
+      example:
+        field: skapad
+        operator: between
+        from: "2026-06-01"
+        to: "2026-06-30"
+
+    ConstraintOffsetToNow:
+      type: object
+      title: ConstraintOffsetToNow
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldDate'
+        operator:
+          type: string
+          enum: [offset_to_now]
+        offset:
+          type: string
+          description: Negativ varaktighet från nu, t.ex. -7d
+      required:
+        - field
+        - operator
+        - offset
+      example:
+        field: planerad_till
+        operator: offset_to_now
+        offset: "-7d"
 
     SortBy:
       type: object
