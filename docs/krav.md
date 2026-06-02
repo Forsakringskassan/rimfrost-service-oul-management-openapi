@@ -11,6 +11,7 @@ The OUL management API manages operative tasks (uppgifter). Currently there is n
 - One sort order specification must be designated as the default; this is the spec applied when handläggare clients retrieve uppgifter without specifying a sort order ID.
 - The sort order shall be persisted (survive restarts).
 - Each created sort order specification is assigned a unique ID (UUID) upon creation.
+- If no default exists at the time of creation, the newly created specification is automatically designated as the default.
 
 ## Scope
 
@@ -33,10 +34,10 @@ A possible future extension could be to apply different sort order specs to diff
 ## Requirements (sort order specification)
 
 - The sort order is an ordered list of entries; the position in the list determines priority (first = highest).
-- Each entry contains one or more field+value constraints (all must match, AND semantics) and an optional "sort by" specifying a single field and direction (asc/desc) within the entry.
+- Each entry contains an optional list of field+value constraints (all must match, AND semantics) and an optional "sort by" specifying a single field and direction (asc/desc) within the entry. An entry with no constraints is a catch-all: it matches all uppgifter not already placed by an earlier entry. A catch-all entry placed before other entries makes those entries unreachable.
 - The sort mechanism traverses the list in order; an uppgift is placed at the position of the first entry whose constraints all match. Each uppgift appears at most once — if multiple entries match, only the highest-priority (earliest) entry applies.
 - Uppgifter matching the same entry are ordered among themselves according to that entry's "sort by" specification; if none is given, their relative order is unspecified.
-- Uppgifter matching no entry fall to the bottom in unspecified order.
+- Uppgifter matching no entry (i.e. when no catch-all entry is present) fall to the bottom in unspecified order.
 - The list length is not fixed.
 - Supported constraint types per field:
   - `uppgift_id`: exact match (UUID) — allows pinning individual uppgifter to a specific position.

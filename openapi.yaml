@@ -71,7 +71,9 @@ paths:
   /sorteringsordning:
     post:
       summary: Skapa sorteringsordning
-      description: Skapar en ny sorteringsordning och returnerar dess genererade ID
+      description: >
+        Skapar en ny sorteringsordning och returnerar dess genererade ID.
+        Om ingen default finns sedan tidigare anges den nyskapade sorteringsordningen automatiskt som default.
       operationId: createSorteringsordning
       requestBody:
         required: true
@@ -171,7 +173,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SorteringsordningResponse'
         '404':
-          description: Ingen default sorteringsordning är angiven
+          description: Ingen sorteringsordning finns — systemet har inte konfigurerats ännu
         '500':
           description: Internt serverfel
 
