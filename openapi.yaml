@@ -129,6 +129,23 @@ paths:
         '500':
           description: Internt serverfel
     get:
+      summary: Hämta alla sorteringsordningar
+      description: Hämtar alla sparade sorteringsordningar
+      operationId: getSorteringsordningar
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SorteringsordningResponse'
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/latest:
+    get:
       summary: Hämta senaste sorteringsordning
       description: Hämtar den senaste sparade sorteringsordningen
       operationId: getLatestSorteringsordning

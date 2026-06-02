@@ -17,9 +17,11 @@ The OUL management API manages operative tasks (uppgifter). Currently there is n
 Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side for:
 
 1. Creating a new sort order specification (returns its generated ID).
-2. Getting a sort order specification — returns the latest spec by default, or a specific spec if an ID is provided.
-3. Deleting a sort order specification by ID.
-4. Previewing the result of a full sort order spec provided inline, without persisting it.
+2. Getting all sort order specifications.
+3. Getting the latest sort order specification (`/sorteringsordning/latest`).
+4. Getting a specific sort order specification by ID.
+5. Deleting a sort order specification by ID.
+6. Previewing the result of a full sort order spec provided inline, without persisting it.
 
 `GET /uppgifter` and `POST /sorteringsordning/preview` shall support a `max` parameter to limit the number of returned uppgifter. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the latest persisted spec is applied.
 
