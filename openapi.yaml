@@ -66,9 +66,19 @@ paths:
       summary: Skapa sorteringsordning
       description: Skapar en ny sorteringsordning och returnerar dess genererade ID
       operationId: createSorteringsordning
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SorteringsordningSpec'
       responses:
         '201':
           description: Sorteringsordningen skapades
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
         '400':
           description: Ogiltigt anrop
         '500':
@@ -80,8 +90,46 @@ paths:
       responses:
         '200':
           description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
         '404':
           description: Ingen sorteringsordning finns
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/preview:
+    post:
+      summary: Förhandsgranska sorteringsordning
+      description: >
+        Returnerar uppgifter sorterade enligt en komplett sorteringsordning angiven
+        inline i anropet, utan att den sparas.
+      operationId: previewSorteringsordning
+      parameters:
+        - name: max
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Maximalt antal uppgifter att returnera
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SorteringsordningSpec'
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OperativUppgift'
+        '400':
+          description: Ogiltigt anrop
         '500':
           description: Internt serverfel
 
@@ -101,6 +149,10 @@ paths:
       responses:
         '200':
           description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
         '404':
           description: Sorteringsordningen hittades inte
         '500':
@@ -122,28 +174,6 @@ paths:
           description: Sorteringsordningen togs bort
         '404':
           description: Sorteringsordningen hittades inte
-        '500':
-          description: Internt serverfel
-
-  /sorteringsordning/preview:
-    post:
-      summary: Förhandsgranska sorteringsordning
-      description: >
-        Returnerar uppgifter sorterade enligt en komplett sorteringsordning angiven
-        inline i anropet, utan att den sparas.
-      operationId: previewSorteringsordning
-      parameters:
-        - name: max
-          in: query
-          required: false
-          schema:
-            type: integer
-          description: Maximalt antal uppgifter att returnera
-      responses:
-        '200':
-          description: Förfrågan genomförd OK
-        '400':
-          description: Ogiltigt anrop
         '500':
           description: Internt serverfel
 
@@ -330,6 +360,114 @@ components:
         - url
         - erbjudande
 
+    SorteringsordningSpec:
+      type: object
+      title: SorteringsordningSpec
+      properties:
+        entries:
+          type: array
+          description: Ordnad lista av sorteringsregler; ordningen bestämmer prioritet (första = högst)
+          items:
+            $ref: '#/components/schemas/SorteringsordningEntry'
+      required:
+        - entries
+
+    SorteringsordningEntry:
+      type: object
+      title: SorteringsordningEntry
+      properties:
+        constraints:
+          type: array
+          description: En eller flera villkor som alla måste uppfyllas (AND-semantik)
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Constraint'
+        sort_by:
+          $ref: '#/components/schemas/SortBy'
+      required:
+        - constraints
+
+    SorteringsordningField:
+      type: string
+      description: Fält som kan användas i sorteringsvillkor och sorteringsordning
+      enum:
+        - uppgift_id
+        - skapad
+        - planerad_till
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    Constraint:
+      type: object
+      title: Constraint
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningField'
+        operator:
+          type: string
+          description: Typ av villkor
+          enum:
+            - eq
+            - contains
+            - between
+            - offset_to_now
+        value:
+          type: string
+          description: Värde för eq och contains
+        from:
+          type: string
+          format: date
+          description: Startdatum för between (ISO 8601)
+        to:
+          type: string
+          format: date
+          description: Slutdatum för between (ISO 8601)
+        offset:
+          type: string
+          description: Offset från nu för offset_to_now (t.ex. -7d)
+      required:
+        - field
+        - operator
+
+    SortBy:
+      type: object
+      title: SortBy
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningField'
+        direction:
+          type: string
+          enum:
+            - asc
+            - desc
+      required:
+        - field
+        - direction
+
+    SorteringsordningResponse:
+      type: object
+      title: SorteringsordningResponse
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar sorteringsordningen
+        skapad:
+          type: string
+          format: date-time
+          description: Tidpunkt då sorteringsordningen skapades i ISO 8601 format
+        entries:
+          type: array
+          description: Ordnad lista av sorteringsregler
+          items:
+            $ref: '#/components/schemas/SorteringsordningEntry'
+      required:
+        - id
+        - skapad
+        - entries
 
     CloudeventAttributes:
       type: object
