@@ -745,6 +745,7 @@ components:
         entries:
           type: array
           description: Ordnad lista av sorteringsregler
+          minItems: 1
           items:
             $ref: '#/components/schemas/SorteringsordningEntry'
       required:
