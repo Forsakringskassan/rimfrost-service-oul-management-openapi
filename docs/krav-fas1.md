@@ -8,8 +8,8 @@ This document defines the requirements for a partial, incremental release of the
 
 The following requirements from `krav.md` do **not** apply in fas 1:
 
-- **Persistence** — the sort order does not need to survive service restarts. An in-memory store is sufficient.
-- **Multiple sort order specifications** — only one sort order specification is supported at a time. Creating a new one replaces the existing one. The active specification is always the default.
+- **REQ-OUL-SORT-005** (persistence) — the sort order does not need to survive service restarts. An in-memory store is sufficient.
+- **REQ-OUL-SORT-003** (mandatory default) and **REQ-OUL-SORT-006** (unique ID per creation) are partially relaxed: only one sort order specification is supported at a time. Creating a new one replaces the existing one and is always the default.
 
 ## Endpoints
 
@@ -38,8 +38,8 @@ The following requirements from `krav.md` do **not** apply in fas 1:
 
 ## Deviations from full spec behaviour
 
-- The `409` response on `DELETE` (protecting the default from deletion) does not apply — `DELETE` is not required.
-- The auto-designation rule ("first created spec becomes default") is trivially satisfied since there is always at most one spec.
+- The `409` response on `DELETE` (protecting the default from deletion, see **REQ-OUL-SORT-003**) does not apply — `DELETE` is not required.
+- **REQ-OUL-SORT-007** (auto-designation) is trivially satisfied since there is always at most one spec.
 - `GET /sorteringsordning` will return at most one item; `total` in `UppgiftPage` reflects the actual count of uppgifter matching the query.
 
 ## Upgrade path
