@@ -126,6 +126,13 @@ paths:
                         - field: beskrivning
                           operator: contains
                           value: "katt"
+              globalSort:
+                summary: Sortera alla uppgifter efter planerad_till (catch-all)
+                value:
+                  entries:
+                    - sort_by:
+                        field: planerad_till
+                        direction: asc
       responses:
         '201':
           description: Sorteringsordningen skapades
@@ -261,6 +268,13 @@ paths:
                         - field: beskrivning
                           operator: contains
                           value: "katt"
+              globalSort:
+                summary: Sortera alla uppgifter efter planerad_till (catch-all)
+                value:
+                  entries:
+                    - sort_by:
+                        field: planerad_till
+                        direction: asc
       responses:
         '200':
           description: Förfrågan genomförd OK
@@ -539,17 +553,21 @@ components:
     SorteringsordningEntry:
       type: object
       title: SorteringsordningEntry
+      description: >
+        En post i sorteringsordningen. Om constraints utelämnas matchar posten alla
+        uppgifter som inte placerats av en tidigare post (catch-all). En catch-all-post
+        placerad före andra poster gör efterföljande poster onåbara.
       properties:
         constraints:
           type: array
-          description: En eller flera villkor som alla måste uppfyllas (AND-semantik)
+          description: >
+            Villkor som alla måste uppfyllas (AND-semantik). Om utelämnat matchar posten
+            alla återstående uppgifter.
           minItems: 1
           items:
             $ref: '#/components/schemas/Constraint'
         sort_by:
           $ref: '#/components/schemas/SortBy'
-      required:
-        - constraints
 
     SorteringsordningField:
       type: string
