@@ -41,12 +41,21 @@ paths:
             type: string
             format: uuid
           description: ID för en specifik sorteringsordning att tillämpa
-        - name: max
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximalt antal uppgifter att returnera
+        - name: offset
           in: query
           required: false
           schema:
             type: integer
-          description: Maximalt antal uppgifter att returnera
+            minimum: 0
+            default: 0
+          description: Antal uppgifter att hoppa över innan resultatet returneras
       responses:
         '200':
           description: Förfrågan genomförd OK
@@ -169,12 +178,21 @@ paths:
         inline i anropet, utan att den sparas.
       operationId: previewSorteringsordning
       parameters:
-        - name: max
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximalt antal uppgifter att returnera
+        - name: offset
           in: query
           required: false
           schema:
             type: integer
-          description: Maximalt antal uppgifter att returnera
+            minimum: 0
+            default: 0
+          description: Antal uppgifter att hoppa över innan resultatet returneras
       requestBody:
         required: true
         content:
@@ -474,6 +492,7 @@ components:
         entries:
           type: array
           description: Ordnad lista av sorteringsregler; ordningen bestämmer prioritet (första = högst)
+          minItems: 1
           items:
             $ref: '#/components/schemas/SorteringsordningEntry'
       required:

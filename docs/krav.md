@@ -23,7 +23,7 @@ Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side
 5. Deleting a sort order specification by ID.
 6. Previewing the result of a full sort order spec provided inline, without persisting it.
 
-`GET /uppgifter` and `POST /sorteringsordning/preview` shall support a `max` parameter to limit the number of returned uppgifter. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the latest persisted spec is applied.
+`GET /uppgifter` and `POST /sorteringsordning/preview` support offset-based pagination via `limit` and `offset` parameters. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the latest persisted spec is applied.
 
 No changes to the handläggare-facing API are required — the sort order is applied transparently on the service side.<br>
 A possible future extension could be to apply different sort order specs to different handläggare.
