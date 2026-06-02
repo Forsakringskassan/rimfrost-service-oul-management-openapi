@@ -72,6 +72,51 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SorteringsordningSpec'
+            examples:
+              pinUppgift:
+                summary: Pinna en specifik uppgift högst
+                value:
+                  entries:
+                    - constraints:
+                        - field: uppgift_id
+                          operator: eq
+                          value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+              dateInterval:
+                summary: Prioritera uppgifter skapade inom ett fast datumintervall
+                value:
+                  entries:
+                    - constraints:
+                        - field: skapad
+                          operator: between
+                          from: "2026-05-01"
+                          to: "2026-05-31"
+                      sort_by:
+                        field: skapad
+                        direction: asc
+              relativeDate:
+                summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
+                value:
+                  entries:
+                    - constraints:
+                        - field: planerad_till
+                          operator: offset_to_now
+                          offset: "-7d"
+              stringMatch:
+                summary: Prioritera efter status och beskrivning
+                value:
+                  entries:
+                    - constraints:
+                        - field: status
+                          operator: eq
+                          value: "AKTIV"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "hund"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "katt"
       responses:
         '201':
           description: Sorteringsordningen skapades
@@ -119,6 +164,51 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SorteringsordningSpec'
+            examples:
+              pinUppgift:
+                summary: Pinna en specifik uppgift högst
+                value:
+                  entries:
+                    - constraints:
+                        - field: uppgift_id
+                          operator: eq
+                          value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+              dateInterval:
+                summary: Prioritera uppgifter skapade inom ett fast datumintervall
+                value:
+                  entries:
+                    - constraints:
+                        - field: skapad
+                          operator: between
+                          from: "2026-05-01"
+                          to: "2026-05-31"
+                      sort_by:
+                        field: skapad
+                        direction: asc
+              relativeDate:
+                summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
+                value:
+                  entries:
+                    - constraints:
+                        - field: planerad_till
+                          operator: offset_to_now
+                          offset: "-7d"
+              stringMatch:
+                summary: Prioritera efter status och beskrivning
+                value:
+                  entries:
+                    - constraints:
+                        - field: status
+                          operator: eq
+                          value: "AKTIV"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "hund"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "katt"
       responses:
         '200':
           description: Förfrågan genomförd OK
@@ -431,6 +521,10 @@ components:
       required:
         - field
         - operator
+      example:
+        field: beskrivning
+        operator: contains
+        value: "hund"
 
     SortBy:
       type: object
@@ -468,6 +562,25 @@ components:
         - id
         - skapad
         - entries
+      example:
+        id: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+        skapad: "2026-06-02T09:15:00Z"
+        entries:
+          - constraints:
+              - field: uppgift_id
+                operator: eq
+                value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          - constraints:
+              - field: planerad_till
+                operator: offset_to_now
+                offset: "-7d"
+            sort_by:
+              field: planerad_till
+              direction: asc
+          - constraints:
+              - field: beskrivning
+                operator: contains
+                value: "hund"
 
     CloudeventAttributes:
       type: object
