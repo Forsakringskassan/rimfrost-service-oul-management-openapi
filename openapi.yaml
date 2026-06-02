@@ -31,7 +31,7 @@ paths:
       summary: Hämta uppgifter
       description: >
         Hämta tillgängliga uppgifter. Om sorteringsordningId anges sorteras resultatet
-        enligt den specificerade sorteringsordningen, annars används den senaste sparade.
+        enligt den specificerade sorteringsordningen, annars används default.
       operationId: getUppgifter
       parameters:
         - name: sorteringsordningId
@@ -150,6 +150,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SorteringsordningResponse'
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/default:
+    get:
+      summary: Hämta default sorteringsordning
+      description: Hämtar den sorteringsordning som är angiven som default
+      operationId: getDefaultSorteringsordning
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
+        '404':
+          description: Ingen default sorteringsordning är angiven
         '500':
           description: Internt serverfel
 
@@ -297,6 +314,27 @@ paths:
       responses:
         '204':
           description: Sorteringsordningen togs bort
+        '404':
+          description: Sorteringsordningen hittades inte
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/{sorteringsordningId}/default:
+    put:
+      summary: Ange default sorteringsordning
+      description: Anger en specifik sorteringsordning som default
+      operationId: setDefaultSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen som ska anges som standard
+      responses:
+        '204':
+          description: Standardsorteringsordningen uppdaterades
         '404':
           description: Sorteringsordningen hittades inte
         '500':

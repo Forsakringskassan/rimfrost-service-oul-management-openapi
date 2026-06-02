@@ -8,7 +8,7 @@ The OUL management API manages operative tasks (uppgifter). Currently there is n
 
 - The management API shall expose a mechanism to define a sort order for uppgifter.
 - The defined sort order is a system-wide configuration — it is not set per handläggare request.
-- Once set via the management API, the sort order applies to all handläggare clients when they retrieve uppgifter.
+- One sort order specification can be designated as the default; this is the spec applied when handläggare clients retrieve uppgifter without specifying a sort order ID.
 - The sort order shall be persisted (survive restarts).
 - Each created sort order specification is assigned a unique ID (UUID) upon creation.
 
@@ -19,11 +19,13 @@ Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side
 1. Creating a new sort order specification (returns its generated ID).
 2. Getting all sort order specifications.
 3. Getting the latest sort order specification (`/sorteringsordning/latest`).
-4. Getting a specific sort order specification by ID.
-5. Deleting a sort order specification by ID.
-6. Previewing the result of a full sort order spec provided inline, without persisting it.
+4. Getting the default sort order specification (`/sorteringsordning/default`).
+5. Setting a specific sort order specification as the default (`PUT /sorteringsordning/{id}/default`).
+6. Getting a specific sort order specification by ID.
+7. Deleting a sort order specification by ID.
+8. Previewing the result of a full sort order spec provided inline, without persisting it.
 
-`GET /uppgifter` and `POST /sorteringsordning/preview` support offset-based pagination via `limit` and `offset` parameters. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the latest persisted spec is applied.
+`GET /uppgifter` and `POST /sorteringsordning/preview` support offset-based pagination via `limit` and `offset` parameters. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the default sort order spec is applied.
 
 No changes to the handläggare-facing API are required — the sort order is applied transparently on the service side.<br>
 A possible future extension could be to apply different sort order specs to different handläggare.
