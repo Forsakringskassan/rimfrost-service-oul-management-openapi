@@ -19,13 +19,9 @@ Update the OpenAPI spec (`openapi.yaml`) to add endpoints on the management side
 1. Creating a new sort order specification (returns its generated ID).
 2. Getting a sort order specification — returns the latest spec by default, or a specific spec if an ID is provided.
 3. Deleting a sort order specification by ID.
-4. Viewing the result of a sort specification. The preview supports three modes:
-   - No parameters: the latest persisted spec is used.
-   - Spec ID provided: the identified existing spec is used.
-   - Full sort order spec provided inline: the provided spec is used.
-   - If both a spec ID and an inline spec are provided, the request is rejected.
+4. Previewing the result of a full sort order spec provided inline, without persisting it.
 
-The preview shall support a `max` parameter to limit the number of returned uppgifter.
+`GET /uppgifter` and `POST /sorteringsordning/preview` shall support a `max` parameter to limit the number of returned uppgifter. `GET /uppgifter` also accepts an optional `sorteringsordningId` query parameter — if omitted, the latest persisted spec is applied.
 
 No changes to the handläggare-facing API are required — the sort order is applied transparently on the service side.<br>
 A possible future extension could be to apply different sort order specs to different handläggare.

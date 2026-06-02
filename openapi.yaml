@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Operativt uppgiftslager API
   version: 1.0.0
-  description: API för att skapa och avsluta operativa uppgifter
+  description: API för att hantera operativa uppgifter och sorteringsordning
 
 paths:
   /uppgifter:
@@ -29,8 +29,24 @@ paths:
           description: Internt serverfel
     get:
       summary: Hämta uppgifter
-      description: Hämta tillgängliga uppgifter
+      description: >
+        Hämta tillgängliga uppgifter. Om sorteringsordningId anges sorteras resultatet
+        enligt den specificerade sorteringsordningen, annars används den senaste sparade.
       operationId: getUppgifter
+      parameters:
+        - name: sorteringsordningId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: ID för en specifik sorteringsordning att tillämpa
+        - name: max
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Maximalt antal uppgifter att returnera
       responses:
         '200':
           description: Förfrågan genomförd OK
@@ -40,6 +56,94 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OperativUppgift'
+        '404':
+          description: Angiven sorteringsordning hittades inte
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning:
+    post:
+      summary: Skapa sorteringsordning
+      description: Skapar en ny sorteringsordning och returnerar dess genererade ID
+      operationId: createSorteringsordning
+      responses:
+        '201':
+          description: Sorteringsordningen skapades
+        '400':
+          description: Ogiltigt anrop
+        '500':
+          description: Internt serverfel
+    get:
+      summary: Hämta senaste sorteringsordning
+      description: Hämtar den senaste sparade sorteringsordningen
+      operationId: getLatestSorteringsordning
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+        '404':
+          description: Ingen sorteringsordning finns
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/{sorteringsordningId}:
+    get:
+      summary: Hämta sorteringsordning
+      description: Hämtar en specifik sorteringsordning
+      operationId: getSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+        '404':
+          description: Sorteringsordningen hittades inte
+        '500':
+          description: Internt serverfel
+    delete:
+      summary: Ta bort sorteringsordning
+      description: Tar bort en befintlig sorteringsordning
+      operationId: deleteSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen som ska tas bort
+      responses:
+        '204':
+          description: Sorteringsordningen togs bort
+        '404':
+          description: Sorteringsordningen hittades inte
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/preview:
+    post:
+      summary: Förhandsgranska sorteringsordning
+      description: >
+        Returnerar uppgifter sorterade enligt en komplett sorteringsordning angiven
+        inline i anropet, utan att den sparas.
+      operationId: previewSorteringsordning
+      parameters:
+        - name: max
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Maximalt antal uppgifter att returnera
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+        '400':
+          description: Ogiltigt anrop
         '500':
           description: Internt serverfel
 
@@ -220,7 +324,7 @@ components:
         - status
         - individer
         - regel
-        - beskrining
+        - beskrivning
         - verksamhetslogik
         - roll
         - url
