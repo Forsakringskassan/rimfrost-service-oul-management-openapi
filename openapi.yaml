@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Operativt uppgiftslager API
   version: 1.0.0
-  description: API för att skapa och avsluta operativa uppgifter
+  description: API för att hantera operativa uppgifter och sorteringsordning
 
 paths:
   /uppgifter:
@@ -29,8 +29,125 @@ paths:
           description: Internt serverfel
     get:
       summary: Hämta uppgifter
-      description: Hämta tillgängliga uppgifter
+      description: >
+        Hämta tillgängliga uppgifter. Om sorteringsordningId anges sorteras resultatet
+        enligt den specificerade sorteringsordningen, annars används default.
       operationId: getUppgifter
+      parameters:
+        - name: sorteringsordningId
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: ID för en specifik sorteringsordning att tillämpa
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximalt antal uppgifter att returnera
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Antal uppgifter att hoppa över innan resultatet returneras
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UppgiftPage'
+        '404':
+          description: Angiven sorteringsordning hittades inte
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning:
+    post:
+      summary: Skapa sorteringsordning
+      description: >
+        Skapar en ny sorteringsordning och returnerar dess genererade ID.
+        Om ingen default finns sedan tidigare anges den nyskapade sorteringsordningen automatiskt som default.
+      operationId: createSorteringsordning
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SorteringsordningSpec'
+            examples:
+              specifikUppgift:
+                summary: Prioritera en specifik uppgift
+                value:
+                  entries:
+                    - constraints:
+                        - field: uppgift_id
+                          operator: eq
+                          value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+              dateInterval:
+                summary: Prioritera uppgifter skapade inom ett fast datumintervall
+                value:
+                  entries:
+                    - constraints:
+                        - field: skapad
+                          operator: between
+                          from: "2026-05-01"
+                          to: "2026-05-31"
+                      sort_by:
+                        field: skapad
+                        direction: asc
+              relativeDate:
+                summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
+                value:
+                  entries:
+                    - constraints:
+                        - field: planerad_till
+                          operator: offset_to_now
+                          offset: "-7d"
+              stringMatch:
+                summary: Prioritera efter status och beskrivning
+                value:
+                  entries:
+                    - constraints:
+                        - field: status
+                          operator: eq
+                          value: "AKTIV"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "hund"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "katt"
+              globalSort:
+                summary: Sortera alla uppgifter efter planerad_till (catch-all)
+                value:
+                  entries:
+                    - sort_by:
+                        field: planerad_till
+                        direction: asc
+      responses:
+        '201':
+          description: Sorteringsordningen skapades
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
+        '400':
+          description: Ogiltigt anrop
+        '500':
+          description: Internt serverfel
+    get:
+      summary: Hämta alla sorteringsordningar
+      description: Hämtar alla sparade sorteringsordningar
+      operationId: getSorteringsordningar
       responses:
         '200':
           description: Förfrågan genomförd OK
@@ -39,7 +156,186 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/OperativUppgift'
+                  $ref: '#/components/schemas/SorteringsordningResponse'
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/default:
+    get:
+      summary: Hämta default sorteringsordning
+      description: Hämtar den sorteringsordning som är angiven som default
+      operationId: getDefaultSorteringsordning
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
+        '404':
+          description: Ingen sorteringsordning finns — systemet har inte konfigurerats ännu
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/preview:
+    post:
+      summary: Förhandsgranska sorteringsordning
+      description: >
+        Returnerar uppgifter sorterade enligt en komplett sorteringsordning angiven
+        inline i anropet, utan att den sparas.
+      operationId: previewSorteringsordning
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximalt antal uppgifter att returnera
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Antal uppgifter att hoppa över innan resultatet returneras
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SorteringsordningSpec'
+            examples:
+              specifikUppgift:
+                summary: Prioritera en specifik uppgift
+                value:
+                  entries:
+                    - constraints:
+                        - field: uppgift_id
+                          operator: eq
+                          value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+              dateInterval:
+                summary: Prioritera uppgifter skapade inom ett fast datumintervall
+                value:
+                  entries:
+                    - constraints:
+                        - field: skapad
+                          operator: between
+                          from: "2026-05-01"
+                          to: "2026-05-31"
+                      sort_by:
+                        field: skapad
+                        direction: asc
+              relativeDate:
+                summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
+                value:
+                  entries:
+                    - constraints:
+                        - field: planerad_till
+                          operator: offset_to_now
+                          offset: "-7d"
+              stringMatch:
+                summary: Prioritera efter status och beskrivning
+                value:
+                  entries:
+                    - constraints:
+                        - field: status
+                          operator: eq
+                          value: "AKTIV"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "hund"
+                    - constraints:
+                        - field: beskrivning
+                          operator: contains
+                          value: "katt"
+              globalSort:
+                summary: Sortera alla uppgifter efter planerad_till (catch-all)
+                value:
+                  entries:
+                    - sort_by:
+                        field: planerad_till
+                        direction: asc
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UppgiftPage'
+        '400':
+          description: Ogiltigt anrop
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/{sorteringsordningId}:
+    get:
+      summary: Hämta sorteringsordning
+      description: Hämtar en specifik sorteringsordning
+      operationId: getSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen
+      responses:
+        '200':
+          description: Förfrågan genomförd OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SorteringsordningResponse'
+        '404':
+          description: Sorteringsordningen hittades inte
+        '500':
+          description: Internt serverfel
+    delete:
+      summary: Ta bort sorteringsordning
+      description: >
+        Tar bort en befintlig sorteringsordning. En sorteringsordning som är angiven
+        som default kan inte tas bort — ange en annan som default först.
+      operationId: deleteSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen som ska tas bort
+      responses:
+        '204':
+          description: Sorteringsordningen togs bort
+        '404':
+          description: Sorteringsordningen hittades inte
+        '409':
+          description: Sorteringsordningen är angiven som default och kan inte tas bort
+        '500':
+          description: Internt serverfel
+
+  /sorteringsordning/{sorteringsordningId}/default:
+    put:
+      summary: Ange default sorteringsordning
+      description: Anger en specifik sorteringsordning som default
+      operationId: setDefaultSorteringsordning
+      parameters:
+        - name: sorteringsordningId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID för sorteringsordningen som ska anges som default
+      responses:
+        '204':
+          description: Default sorteringsordning uppdaterades
+        '404':
+          description: Sorteringsordningen hittades inte
         '500':
           description: Internt serverfel
 
@@ -132,6 +428,22 @@ paths:
 
 components:
   schemas:
+    UppgiftPage:
+      type: object
+      title: UppgiftPage
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          description: Totalt antal uppgifter som matchar förfrågan
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OperativUppgift'
+      required:
+        - total
+        - items
+
     CreateUppgiftRequest:
       type: object
       title: CreateUppgiftRequest
@@ -235,7 +547,7 @@ components:
         skapad:
           type: string
           format: date
-          description: DateTime av när uppgiften skapades i ISO 8601 format
+          description: Datum då uppgiften skapades i ISO 8601 format
         handlaggar_id:
           $ref: "#/components/schemas/Idtyp"
           description: Unikt ID för den tilldelade handläggaren
@@ -244,12 +556,12 @@ components:
           type: string
           format: date
           nullable: true
-          description: DateTime av tidpunkten som uppgiften är planerad att vara färdig i ISO 8601 format
+          description: Datum då uppgiften är planerad att vara färdig i ISO 8601 format
         utford:
           type: string
           format: date
           nullable: true
-          description: DateTime av tidpunkten som uppgiften blev färdig i ISO 8601 format
+          description: Datum då uppgiften blev färdig i ISO 8601 format
         status:
           type: string
           description: Status för uppgiften
@@ -284,12 +596,246 @@ components:
         - status
         - individer
         - regel
-        - beskrining
+        - beskrivning
         - verksamhetslogik
         - roll
         - url
         - erbjudande
 
+    SorteringsordningSpec:
+      type: object
+      title: SorteringsordningSpec
+      properties:
+        entries:
+          type: array
+          description: Ordnad lista av sorteringsregler; ordningen bestämmer prioritet (första = högst)
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SorteringsordningEntry'
+      required:
+        - entries
+
+    SorteringsordningEntry:
+      type: object
+      title: SorteringsordningEntry
+      description: >
+        En post i sorteringsordningen. Om constraints utelämnas matchar posten alla
+        uppgifter som inte placerats av en tidigare post (catch-all). En catch-all-post
+        placerad före andra poster gör efterföljande poster överflödiga.
+      properties:
+        constraints:
+          type: array
+          description: >
+            Villkor som alla måste uppfyllas (AND-semantik). Om utelämnat matchar posten
+            alla återstående uppgifter.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Constraint'
+        sort_by:
+          $ref: '#/components/schemas/SortBy'
+
+    SorteringsordningField:
+      type: string
+      description: Alla fält som kan användas i sorteringsordning (sort_by)
+      enum:
+        - uppgift_id
+        - skapad
+        - planerad_till
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    SorteringsordningFieldEq:
+      type: string
+      description: Fält som stödjer eq-operator (exakt matchning)
+      enum:
+        - uppgift_id
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    SorteringsordningFieldString:
+      type: string
+      description: Strängfält som stödjer contains-operator
+      enum:
+        - status
+        - regel
+        - roll
+        - verksamhetslogik
+        - beskrivning
+
+    SorteringsordningFieldDate:
+      type: string
+      description: Datumfält som stödjer between och offset_to_now
+      enum:
+        - skapad
+        - planerad_till
+
+    Constraint:
+      oneOf:
+        - $ref: '#/components/schemas/ConstraintEq'
+        - $ref: '#/components/schemas/ConstraintContains'
+        - $ref: '#/components/schemas/ConstraintBetween'
+        - $ref: '#/components/schemas/ConstraintOffsetToNow'
+      discriminator:
+        propertyName: operator
+        mapping:
+          eq: '#/components/schemas/ConstraintEq'
+          contains: '#/components/schemas/ConstraintContains'
+          between: '#/components/schemas/ConstraintBetween'
+          offset_to_now: '#/components/schemas/ConstraintOffsetToNow'
+
+    ConstraintEq:
+      type: object
+      title: ConstraintEq
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldEq'
+        operator:
+          type: string
+          enum: [eq]
+        value:
+          type: string
+          description: Exakt matchningsvärde
+      required:
+        - field
+        - operator
+        - value
+      example:
+        field: beskrivning
+        operator: eq
+        value: "hund"
+
+    ConstraintContains:
+      type: object
+      title: ConstraintContains
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldString'
+        operator:
+          type: string
+          enum: [contains]
+        value:
+          type: string
+          description: Delvärde som fältet ska innehålla
+      required:
+        - field
+        - operator
+        - value
+      example:
+        field: beskrivning
+        operator: contains
+        value: "hund"
+
+    ConstraintBetween:
+      type: object
+      title: ConstraintBetween
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldDate'
+        operator:
+          type: string
+          enum: [between]
+        from:
+          type: string
+          format: date
+          description: Startdatum för intervallet (ISO 8601)
+        to:
+          type: string
+          format: date
+          description: Slutdatum för intervallet (ISO 8601)
+      required:
+        - field
+        - operator
+        - from
+        - to
+      example:
+        field: skapad
+        operator: between
+        from: "2026-06-01"
+        to: "2026-06-30"
+
+    ConstraintOffsetToNow:
+      type: object
+      title: ConstraintOffsetToNow
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningFieldDate'
+        operator:
+          type: string
+          enum: [offset_to_now]
+        offset:
+          type: string
+          description: Negativ varaktighet från nu, t.ex. -7d
+      required:
+        - field
+        - operator
+        - offset
+      example:
+        field: planerad_till
+        operator: offset_to_now
+        offset: "-7d"
+
+    SortBy:
+      type: object
+      title: SortBy
+      properties:
+        field:
+          $ref: '#/components/schemas/SorteringsordningField'
+        direction:
+          type: string
+          enum:
+            - asc
+            - desc
+      required:
+        - field
+        - direction
+
+    SorteringsordningResponse:
+      type: object
+      title: SorteringsordningResponse
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unikt ID som identifierar sorteringsordningen
+        skapad:
+          type: string
+          format: date-time
+          description: Tidpunkt då sorteringsordningen skapades i ISO 8601 format
+        entries:
+          type: array
+          description: Ordnad lista av sorteringsregler
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SorteringsordningEntry'
+      required:
+        - id
+        - skapad
+        - entries
+      example:
+        id: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+        skapad: "2026-06-02T09:15:00Z"
+        entries:
+          - constraints:
+              - field: uppgift_id
+                operator: eq
+                value: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          - constraints:
+              - field: planerad_till
+                operator: offset_to_now
+                offset: "-7d"
+            sort_by:
+              field: planerad_till
+              direction: asc
+          - constraints:
+              - field: beskrivning
+                operator: contains
+                value: "hund"
 
     CloudeventAttributes:
       type: object
