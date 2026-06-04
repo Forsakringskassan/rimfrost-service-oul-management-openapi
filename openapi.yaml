@@ -43,6 +43,58 @@ paths:
         '500':
           description: Internt serverfel
 
+  /uppgifter/{uppgiftId}:
+    patch:
+      summary: Uppdatera uppgift
+      parameters:
+        - name: uppgiftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unikt ID som identifierar uppgiften som ska uppdateras
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUppgiftRequest'
+      responses:
+        '200':
+           description: Uppgiften uppdaterades
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/OperativUppgift'
+        '404':
+          description: Uppgiften hittades inte
+        '500':
+          description: Internt serverfel
+
+  /uppgifter/{uppgiftId}/unassign:
+    post:
+      summary: Lägg tillbaka uppgift i kön
+      parameters:
+        - name: uppgiftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unikt ID som identifierar uppgiften som ska uppdateras
+      responses:
+        '200':
+           description: Uppgiften uppdaterades
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/OperativUppgift'
+        '404':
+          description: Uppgiften hittades inte
+        '500':
+          description: Internt serverfel
+
   /uppgifter/{uppgiftId}/end:
     post:
       summary: Avsluta uppgift
@@ -122,6 +174,14 @@ components:
         - sub_topic
         - cloudevent_attributes
         - erbjudande
+
+    UpdateUppgiftRequest:
+      type: object
+      title: UpdateUppgiftRequest
+      properties:
+        handlaggar_id:
+          $ref: "#/components/schemas/Idtyp"
+          description: Unikt ID för den handläggaren uppgiften ska tilldelas till
 
     UppgiftResponse:
       type: object
