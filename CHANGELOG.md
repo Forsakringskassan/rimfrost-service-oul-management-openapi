@@ -1,3 +1,9 @@
+## 1.1.2 (2026-06-04)
+
+### Bug Fixes
+
+-  Add missing description and operationId to uppgift patch and unassign operations ([4868d](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/4868d07237ea26f) Lars Persson)  
+
 ## 1.1.1 (2026-06-04)
 
 ### Bug Fixes
