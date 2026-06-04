@@ -1,3 +1,9 @@
+## 1.1.1 (2026-06-04)
+
+### Bug Fixes
+
+-  Add support for unassigning and reassigning task ([6c954](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/6c95479a551f487) Lars Persson)  
+
 ## 0.0.5 (2026-05-21)
 
 ### Bug Fixes
