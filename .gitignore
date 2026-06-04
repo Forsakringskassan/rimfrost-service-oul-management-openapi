@@ -8,10 +8,12 @@ openapitools.json
 package-lock.json
 package.json
 src/helpers.ts
-template
+template/**
+!template/typescript-fetch/
+!template/typescript-fetch/modelOneOf.mustache
 tsconfig.json
-typescript-axios
-typescript-fetch
+/typescript-axios
+/typescript-fetch
 
 src/generated-source
 src/main/resources/openapi.yaml
