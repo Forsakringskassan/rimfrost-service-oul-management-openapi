@@ -46,6 +46,8 @@ paths:
   /uppgifter/{uppgiftId}:
     patch:
       summary: Uppdatera uppgift
+      description: Uppdatera uppgift
+      operationId: updateUppgift
       parameters:
         - name: uppgiftId
           in: path
@@ -75,6 +77,8 @@ paths:
   /uppgifter/{uppgiftId}/unassign:
     post:
       summary: Lägg tillbaka uppgift i kön
+      description: Lägg tillbaka uppgift i kön
+      operationId: unassignUppgift
       parameters:
         - name: uppgiftId
           in: path
