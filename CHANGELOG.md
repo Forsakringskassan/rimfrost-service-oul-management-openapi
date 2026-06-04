@@ -1,3 +1,30 @@
+## 1.2.0 (2026-06-04)
+
+### Features
+
+-  fix oneOf discriminator TypeScript generation for Constraint type ([81025](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/81025e82d030e00) Ulf Slunga)  
+-  add requirement tags and align krav-fas1 with updated krav ([22d71](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/22d714cf824c43b) Ulf Slunga)  
+-  add fas 1 partial implementation requirements ([fa420](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/fa4209d9509565b) Ulf Slunga)  
+-  document catch-all entries, bootstrap default, and 404 semantics ([67a0c](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/67a0c8d39a3b632) Ulf Slunga)  
+-  wrap paginated responses in UppgiftPage envelope with total count ([9e349](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/9e3493819917472) Ulf Slunga)  
+-  remove /sorteringsordning/latest endpoint superseded by default ([16b8b](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/16b8bc0dab4502f) Ulf Slunga)  
+-  require a default sorteringsordning and reject delete of current default ([5f16b](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/5f16bc175dd6442) Ulf Slunga)  
+-  add minItems: 1 to SorteringsordningResponse entries ([7dcab](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/7dcab2dcaecec7d) Ulf Slunga)  
+-  allow constraint-free entries as catch-all sort ([17554](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/1755467321939eb) Ulf Slunga)  
+-  enforce operator/field constraints via typed Constraint schemas ([9e30d](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/9e30d4631e0f242) Ulf Slunga)  
+-  add default sorteringsordning endpoints and explicit default concept ([765be](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/765be6326c52f37) Ulf Slunga)  
+-  add pagination, tighten limit/offset and entries constraints ([b913a](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/b913affa40855ac) Ulf Slunga)  
+-  list all sorteringsordningar and add /latest endpoint ([722eb](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/722eb1d2ba59b4f) Ulf Slunga)  
+-  add examples for constraint and sorteringsordning schemas ([682c4](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/682c43c022f4f1a) Ulf Slunga)  
+-  add sorteringsordning schemas and request/response bodies ([76dcf](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/76dcfe2018fd22f) Ulf Slunga)  
+-  add sorteringsordning endpoints and fix beskrivning typo ([3d6b4](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/3d6b4e23b6f2802) Ulf Slunga)  
+-  refine sort order spec requirements and endpoint definitions ([a5785](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/a57859f2d47ee39) Ulf Slunga)  
+-  add requirements doc for sort order specification ([b967c](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/b967ca53c73d16a) Ulf Slunga)  
+
+### Bug Fixes
+
+-  correct date field descriptions in OperativUppgift ([9a311](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/9a311ca3b9f662d) Ulf Slunga)  
+
 ## 1.1.2 (2026-06-04)
 
 ### Bug Fixes
