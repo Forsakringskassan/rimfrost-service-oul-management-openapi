@@ -4,9 +4,16 @@ info:
   version: 1.0.0
   description: API för att hantera operativa uppgifter och sorteringsordning
 
+tags:
+  - name: Uppgifter
+    description: Hantering av operativa uppgifter
+  - name: Sorteringsordning
+    description: Hantering av sorteringsordningar
+
 paths:
   /uppgifter:
     post:
+      tags: [Uppgifter]
       summary: Skapa uppgift
       description: Skapar en ny operativ uppgift i uppgiftslagret
       operationId: createUppgift
@@ -28,6 +35,7 @@ paths:
         '500':
           description: Internt serverfel
     get:
+      tags: [Uppgifter]
       summary: Hämta uppgifter
       description: >
         Hämta tillgängliga uppgifter. Om sorteringsordningId anges sorteras resultatet
@@ -70,6 +78,7 @@ paths:
 
   /sorteringsordning:
     post:
+      tags: [Sorteringsordning]
       summary: Skapa sorteringsordning
       description: >
         Skapar en ny sorteringsordning och returnerar dess genererade ID.
@@ -145,6 +154,7 @@ paths:
         '500':
           description: Internt serverfel
     get:
+      tags: [Sorteringsordning]
       summary: Hämta alla sorteringsordningar
       description: Hämtar alla sparade sorteringsordningar
       operationId: getSorteringsordningar
@@ -162,6 +172,7 @@ paths:
 
   /sorteringsordning/default:
     get:
+      tags: [Sorteringsordning]
       summary: Hämta default sorteringsordning
       description: Hämtar den sorteringsordning som är angiven som default
       operationId: getDefaultSorteringsordning
@@ -179,6 +190,7 @@ paths:
 
   /sorteringsordning/preview:
     post:
+      tags: [Sorteringsordning]
       summary: Förhandsgranska sorteringsordning
       description: >
         Returnerar uppgifter sorterade enligt en komplett sorteringsordning angiven
@@ -272,6 +284,7 @@ paths:
 
   /sorteringsordning/{sorteringsordningId}:
     get:
+      tags: [Sorteringsordning]
       summary: Hämta sorteringsordning
       description: Hämtar en specifik sorteringsordning
       operationId: getSorteringsordning
@@ -295,6 +308,7 @@ paths:
         '500':
           description: Internt serverfel
     delete:
+      tags: [Sorteringsordning]
       summary: Ta bort sorteringsordning
       description: >
         Tar bort en befintlig sorteringsordning. En sorteringsordning som är angiven
@@ -320,6 +334,7 @@ paths:
 
   /sorteringsordning/{sorteringsordningId}/default:
     put:
+      tags: [Sorteringsordning]
       summary: Ange default sorteringsordning
       description: Anger en specifik sorteringsordning som default
       operationId: setDefaultSorteringsordning
@@ -341,6 +356,7 @@ paths:
 
   /uppgifter/{uppgiftId}:
     patch:
+      tags: [Uppgifter]
       summary: Uppdatera uppgift
       description: Uppdatera uppgift
       operationId: updateUppgift
@@ -372,6 +388,7 @@ paths:
 
   /uppgifter/{uppgiftId}/unassign:
     post:
+      tags: [Uppgifter]
       summary: Lägg tillbaka uppgift i kön
       description: Lägg tillbaka uppgift i kön
       operationId: unassignUppgift
@@ -397,6 +414,7 @@ paths:
 
   /uppgifter/{uppgiftId}/end:
     post:
+      tags: [Uppgifter]
       summary: Avsluta uppgift
       description: Avslutar en befintlig operativ uppgift
       operationId: endUppgift
