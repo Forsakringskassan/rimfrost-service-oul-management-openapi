@@ -1,3 +1,9 @@
+## 1.3.1 (2026-06-05)
+
+### Bug Fixes
+
+-  correct POST /uppgifter response code to 201 Created ([27f27](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/27f27365c72bfcb) Ulf Slunga)  
+
 ## 1.3.0 (2026-06-05)
 
 ### Features
