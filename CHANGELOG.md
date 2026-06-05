@@ -1,3 +1,9 @@
+## 1.3.0 (2026-06-05)
+
+### Features
+
+-  Split DefaultApi into UppgifterApi and SorteringsordningApi by tags ([d9931](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/d99319f3ed4f77e) Ulf Slunga)  
+
 ## 1.2.0 (2026-06-04)
 
 ### Features
