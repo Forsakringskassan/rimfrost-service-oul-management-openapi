@@ -1,3 +1,10 @@
+## 1.3.2 (2026-06-08)
+
+### Bug Fixes
+
+-  Replace api-npm-* workflows with gradle-* workflows ([2e5bf](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/2e5bf26433e9cc1) Lars Persson)  
+-  Remove create / end operations ([af6bc](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/af6bccd83de323f) Lars Persson)  
+
 ## 1.3.1 (2026-06-05)
 
 ### Bug Fixes
