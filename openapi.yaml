@@ -136,15 +136,29 @@ paths:
       summary: Hämta alla sorteringsordningar
       description: Hämtar alla sparade sorteringsordningar
       operationId: getSorteringsordningar
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximalt antal sorteringsordningar att returnera
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Antal sorteringsordningar att hoppa över innan resultatet returneras
       responses:
         '200':
           description: Förfrågan genomförd OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SorteringsordningResponse'
+                $ref: '#/components/schemas/SorteringsordningPage'
         '500':
           description: Internt serverfel
 
@@ -484,6 +498,22 @@ components:
         - roll
         - url
         - erbjudande
+
+    SorteringsordningPage:
+      type: object
+      title: SorteringsordningPage
+      required:
+        - total
+        - items
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          description: Totalt antal sorteringsordningar som matchar förfrågan
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SorteringsordningResponse'
 
     SorteringsordningSpec:
       type: object
