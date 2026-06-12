@@ -1,3 +1,9 @@
+## 1.3.3 (2026-06-12)
+
+### Bug Fixes
+
+-  add pagination support to getSorteringsordningar endpoint ([dda34](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/dda3435551ab6a5) Ulf Slunga)  
+
 ## 1.3.2 (2026-06-08)
 
 ### Bug Fixes
