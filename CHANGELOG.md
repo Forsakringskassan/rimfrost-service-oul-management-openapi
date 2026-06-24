@@ -1,3 +1,14 @@
+## 1.3.4 (2026-06-24)
+
+### Bug Fixes
+
+-  Add namn field to sorteringsordning spec and response ([49475](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/4947550ba236f37) Lars Persson)  
+-  **deps**  update dependency se.fk.gradle:gradle-conventions to v1.18.3 ([ee2c1](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/ee2c10b28066814) renovate[bot])  
+-  **deps**  update jackson monorepo ([fb87b](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/fb87b729d464a77) renovate[bot])  
+
+### Dependency updates
+
+- update gradle to v9.5.1 ([be642](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/be642ab3dd5f3b4) renovate[bot])  
 ## 1.3.3 (2026-06-12)
 
 ### Bug Fixes
