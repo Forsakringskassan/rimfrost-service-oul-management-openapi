@@ -72,6 +72,7 @@ paths:
               specifikUppgift:
                 summary: Prioritera en specifik uppgift
                 value:
+                  namn: Prioritera uppgift
                   entries:
                     - constraints:
                         - field: uppgift_id
@@ -80,6 +81,7 @@ paths:
               dateInterval:
                 summary: Prioritera uppgifter skapade inom ett fast datumintervall
                 value:
+                  namn: Prioritera datumintervall
                   entries:
                     - constraints:
                         - field: skapad
@@ -92,6 +94,7 @@ paths:
               relativeDate:
                 summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
                 value:
+                  namn: Prioritera uppgifter planerade inom de senaste 7 dagarna
                   entries:
                     - constraints:
                         - field: planerad_till
@@ -100,6 +103,7 @@ paths:
               stringMatch:
                 summary: Prioritera efter status och beskrivning
                 value:
+                  namn: Prioritera status och beskrivning
                   entries:
                     - constraints:
                         - field: status
@@ -116,6 +120,7 @@ paths:
               globalSort:
                 summary: Sortera alla uppgifter efter planerad_till (catch-all)
                 value:
+                  namn: Catch-all
                   entries:
                     - sort_by:
                         field: planerad_till
@@ -214,6 +219,7 @@ paths:
               specifikUppgift:
                 summary: Prioritera en specifik uppgift
                 value:
+                  namn: Prioritera uppgift
                   entries:
                     - constraints:
                         - field: uppgift_id
@@ -222,6 +228,7 @@ paths:
               dateInterval:
                 summary: Prioritera uppgifter skapade inom ett fast datumintervall
                 value:
+                  namn: Prioritera datumintervall
                   entries:
                     - constraints:
                         - field: skapad
@@ -234,6 +241,7 @@ paths:
               relativeDate:
                 summary: Prioritera uppgifter planerade inom de senaste 7 dagarna
                 value:
+                  namn: Prioritera uppgifter planerade inom de senaste 7 dagarna
                   entries:
                     - constraints:
                         - field: planerad_till
@@ -242,6 +250,7 @@ paths:
               stringMatch:
                 summary: Prioritera efter status och beskrivning
                 value:
+                  namn: Prioritera status och beskrivning
                   entries:
                     - constraints:
                         - field: status
@@ -258,6 +267,7 @@ paths:
               globalSort:
                 summary: Sortera alla uppgifter efter planerad_till (catch-all)
                 value:
+                  namn: Catch-all
                   entries:
                     - sort_by:
                         field: planerad_till
@@ -519,6 +529,9 @@ components:
       type: object
       title: SorteringsordningSpec
       properties:
+        namn:
+          type: string
+          minLength: 1
         entries:
           type: array
           description: Ordnad lista av sorteringsregler; ordningen bestämmer prioritet (första = högst)
@@ -526,6 +539,7 @@ components:
           items:
             $ref: '#/components/schemas/SorteringsordningEntry'
       required:
+        - namn
         - entries
 
     SorteringsordningEntry:
@@ -720,6 +734,9 @@ components:
           type: string
           format: date-time
           description: Tidpunkt då sorteringsordningen skapades i ISO 8601 format
+        namn:
+          type: string
+          minLength: 1
         entries:
           type: array
           description: Ordnad lista av sorteringsregler
@@ -729,10 +746,12 @@ components:
       required:
         - id
         - skapad
+        - namn
         - entries
       example:
         id: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
         skapad: "2026-06-02T09:15:00Z"
+        namn: "Soteringsordning 1"
         entries:
           - constraints:
               - field: uppgift_id
