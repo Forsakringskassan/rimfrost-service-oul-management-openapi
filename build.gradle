@@ -43,6 +43,6 @@ project("rimfrost-service-oul-management-api-jaxrs-spec",{
 		compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
 		compileOnly 'com.fasterxml.jackson.core:jackson-annotations:2.22'
 		compileOnly 'com.fasterxml.jackson.core:jackson-core:2.22.1'
-		compileOnly 'org.openapitools:jackson-databind-nullable:0.2.10'
+		compileOnly 'org.openapitools:jackson-databind-nullable:0.2.11'
 	}
 })
