@@ -1,3 +1,24 @@
+## 1.4.0 (2026-09-02)
+
+### Features
+
+-  update openapi.yaml with aktiv markering ([7f43f](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/7f43fc36adf11d3) julolsso)  
+
+### Bug Fixes
+
+-  docs: förtydliga att endast en sorteringsordning kan vara aktiv ([81242](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/81242c7f768b8cb) julolsso)  
+-  **deps**  update jackson monorepo to v2.22.2 ([66659](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/666590a59af7130) renovate[bot])  
+-  **deps**  update dependency org.openapitools:jackson-databind-nullable to v0.2.11 ([c5134](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/c513499ee21c8be) renovate[bot])  
+-  **deps**  update jackson monorepo to v2.22.1 ([cd11f](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/cd11f8baa31be06) renovate[bot])  
+
+### Dependency updates
+
+- update gradle to v9.7.0 ([de89e](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/de89eefa5143c7a) renovate[bot])  
+- update gradle to v9.6.1 ([3261f](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/3261f740c603fd7) renovate[bot])  
+- update gradle to v9.6.0 ([8097e](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/8097e3837502240) renovate[bot])  
+### Other changes
+
+
 ## 1.3.4 (2026-06-24)
 
 ### Bug Fixes
