@@ -338,7 +338,10 @@ paths:
     put:
       tags: [Sorteringsordning]
       summary: Ange aktiv sorteringsordning
-      description: Anger en specifik sorteringsordning som aktiv
+      description: >
+        Anger en specifik sorteringsordning som aktiv. Endast en sorteringsordning
+        kan vara markerad som aktiv åt gången, och tidigare markerad
+        sorteringsordning avmarkeras när en ny anges som aktiv.
       operationId: setAktivSorteringsordning
       parameters:
         - name: sorteringsordningId
