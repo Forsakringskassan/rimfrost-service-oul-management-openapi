@@ -1,3 +1,16 @@
+## 1.4.2 (2026-10-29)
+
+### Bug Fixes
+
+-  update workflows ([79da9](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/79da9b1d1b3fa45) Nils Elveros)  
+-  **deps**  update jackson monorepo to v2.22.3 ([205bb](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/205bbc2ec275120) renovate[bot])  
+-  **deps**  update dependency org.openapitools:jackson-databind-nullable to v0.2.12 ([990d3](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/990d3d916143119) renovate[bot])  
+
+### Dependency updates
+
+- update forsakringskassan/.github digest to cbd74f1 ([c9c9b](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/c9c9b3e0e350d1e) renovate[bot])  
+- update gradle to v9.8.1 ([4591a](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/4591a0522ea50da) renovate[bot])  
+- update forsakringskassan/.github digest to bfb01f7 ([e6376](https://github.com/Forsakringskassan/rimfrost-service-oul-management-openapi/commit/e6376386d7f8938) renovate[bot])  
 ## 1.4.1 (2026-09-21)
 
 ### Dependency updates
